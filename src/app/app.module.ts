@@ -10,6 +10,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 // rutas
 import { AppRoutingModule } from './app-routing.module';
 
+import { environment } from 'src/environments/environment';
+
 // componentes
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -39,7 +41,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    AngularFireModule,
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule
   ],
