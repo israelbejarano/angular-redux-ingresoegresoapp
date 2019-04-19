@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from './user.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.accions';
+import { SetUserAction } from './auth.actions';
 import Swal from 'sweetalert2';
 import * as firebase from 'firebase';
 
@@ -15,13 +17,24 @@ import * as firebase from 'firebase';
 })
 export class AuthService {
 
+  private userSubscription: Subscription = new Subscription();
+
   constructor(private afAuth: AngularFireAuth, private router: Router,
               private afBD: AngularFirestore, private store: Store<AppState>) { }
 
   initAuthListener() {
     this.afAuth.authState.subscribe((fbUser: firebase.User) => {
       console.log(fbUser);
-
+      if (fbUser) {
+        this.userSubscription = this.afBD.doc(`${fbUser.uid}/usuario`).valueChanges()
+          .subscribe((usuarioObj: any) => {
+            const newUser = new User(usuarioObj);
+            console.log(newUser);
+            this.store.dispatch(new SetUserAction(newUser));
+        });
+      } else {
+        this.userSubscription.unsubscribe();
+      }
     });
   }
 
