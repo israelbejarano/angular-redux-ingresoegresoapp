@@ -8,7 +8,7 @@ import { User } from './user.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import { ActivarLoadingAction, DesactivarLoadingAction } from '../shared/ui.accions';
-import { SetUserAction } from './auth.actions';
+import { SetUserAction, UnsetUserAction } from './auth.actions';
 import Swal from 'sweetalert2';
 import * as firebase from 'firebase';
 
@@ -83,6 +83,7 @@ export class AuthService {
   logout() {
     this.router.navigate(['/login']);
     this.afAuth.auth.signOut();
+    this.store.dispatch(new UnsetUserAction());
   }
 
   isAuth() {
