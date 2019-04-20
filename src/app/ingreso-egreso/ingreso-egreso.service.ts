@@ -44,6 +44,11 @@ export class IngresoEgresoService {
       .add({...ingresoEgreso});
   }
 
+  borrarIngresoEgreso(uid: string) {
+    const usuario = this.authService.getUsuario();
+    return this.afBD.doc(`${usuario.uid}/ingresos-egresos/items/${uid}`).delete();
+  }
+
   cancelarSubscription() {
     this.ingresoEgresoItemsListenerSubscription.unsubscribe();
     this.ingresoEgresoListenerSubscription.unsubscribe();

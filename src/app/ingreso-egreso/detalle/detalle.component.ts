@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { IngresoEgreso } from '../ingreso-egreso.model';
 import { Subscription } from 'rxjs';
+import { IngresoEgresoService } from '../ingreso-egreso.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle',
@@ -14,7 +16,7 @@ export class DetalleComponent implements OnInit, OnDestroy {
   items: IngresoEgreso[];
   subscription: Subscription = new Subscription();
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>, public ingresoEgresoService: IngresoEgresoService) { }
 
   ngOnInit() {
     this.subscription = this.store.select('ingresoEgreso').subscribe(ingresoEgreso => {
@@ -26,8 +28,13 @@ export class DetalleComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  borrarItem(uid: string) {
-
+  borrarItem(item: IngresoEgreso) {
+    this.ingresoEgresoService.borrarIngresoEgreso(item.uid)
+      .then(() => Swal.fire('Borrado', item.descripcion, 'success'))
+      .catch(error => {
+        console.error(error);
+        Swal.fire('Error al borrar en BBDD', error.message, 'error');
+    });
   }
 
 }
