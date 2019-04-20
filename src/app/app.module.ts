@@ -12,6 +12,9 @@ import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+// graficas
+import { ChartsModule } from 'ng2-charts';
+
 // rutas
 import { AppRoutingModule } from './app-routing.module';
 
@@ -49,6 +52,7 @@ import { OrdenIngresoEgresoPipe } from './ingreso-egreso/orden-ingreso-egreso.pi
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    ChartsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
