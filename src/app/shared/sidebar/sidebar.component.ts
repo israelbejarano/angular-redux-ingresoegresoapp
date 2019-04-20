@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { filter } from 'rxjs/operators';
+import { IngresoEgresoService } from '../../ingreso-egreso/ingreso-egreso.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,7 +16,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   nombre: string;
   subscription: Subscription = new Subscription();
 
-  constructor(public authService: AuthService, private store: Store<AppState>) { }
+  constructor(public authService: AuthService, private store: Store<AppState>, public ingresoEgresoService: IngresoEgresoService) { }
 
   ngOnInit() {
     this.subscription = this.store.select('auth')
@@ -29,6 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+    this.ingresoEgresoService.cancelarSubscription();
   }
 
 }
